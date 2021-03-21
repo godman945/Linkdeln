@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -25,18 +26,27 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import com.enu.LinkdelnDetailEnum;
+import org.springframework.core.io.ClassPathResource;
 
 @Component
 public class SeleniumTest {
 
-	public  void process() {
+	@Value("classpath:/chromedriver.exe")
+	private Resource resource;
+	
+	public  void process() throws Exception {
+		
+		 File file = resource.getFile();
+		 System.out.println(file);
 		//System.setProperty("webdriver.chrome.driver","‪chromedriver.txt");
 		
 		
@@ -49,7 +59,7 @@ public class SeleniumTest {
 //		chromeOptions.addArguments("window-size=1920x3000");
 //		WebDriver driver= new ChromeDriver(chromeOptions);
 //		
-		File targetFile = new File("C:\\Users\\User\\git\\Linkdeln\\chromedriver2.exe");
+		File targetFile = new File("C:\\Users\\User\\git\\Linkdeln\\src\\main\\resources\\chromedriver.exe");
 		
 		System.setProperty("webdriver.chrome.driver", targetFile.getPath());
 		
@@ -104,7 +114,7 @@ public class SeleniumTest {
 			linkedinData.put("linkedinurl", "");
 			linkedinData.put("picName", "");
 			
-			String company="dfi-inc";
+			String company="pchome-online";
 			
 			String url = "https://www.linkedin.com/company/" + company + "/about";
 			linkedinData.put("linkedinurl", url);

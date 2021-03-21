@@ -17,6 +17,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,28 +33,21 @@ public class SeleniumUtil {
 	@Autowired
     ResourceLoader resourceLoader;
 	
-	
+	@Value("classpath:/chromedriver.exe")
+	private Resource resource;
 	
 	@Bean("webDriver")
 	public WebDriver webDriver(){
 		WebDriver webDriver = null;
 		try {
-			ClassPathResource classPathResource = new ClassPathResource("chromedriver.exe");
-			InputStream inputStream = classPathResource.getInputStream();
-			File targetFile = new File("chromedriver2.exe");
-			OutputStream outputStream = new FileOutputStream(targetFile);
-			IOUtils.copy(inputStream, outputStream);
-			outputStream.close();
-			
-			System.setProperty("webdriver.chrome.driver", targetFile.getPath());
-			
-			ChromeOptions chromeOptions = new ChromeOptions();
-			chromeOptions.addArguments("headless");
-			chromeOptions.addArguments("--disable-gpu");
-			chromeOptions.addArguments("--hide-scrollbars");
-			chromeOptions.addArguments("window-size=1920x3000");
-			
-			
+			 File chromefile = resource.getFile();
+			 System.setProperty("webdriver.chrome.driver", chromefile.getPath());
+			 ChromeOptions chromeOptions = new ChromeOptions();
+			 chromeOptions.addArguments("headless");
+			 chromeOptions.addArguments("--disable-gpu");
+			 chromeOptions.addArguments("--hide-scrollbars");
+			 chromeOptions.addArguments("window-size=1920x3000");
+			 
 			ApplicationHome applicationHome = new ApplicationHome(getClass());
 			File file = applicationHome.getSource();
 			String userPath = file.getParentFile().toString()+"\\account.properties";
